@@ -33,6 +33,20 @@ public class Task {
         this.status = 2;
     }
 
+    @Override
+    //EFFECTS: returns properly formatted string of task
+    public String toString() {
+        String state = "";
+        if (this.getStatus() == 0) {
+            state = "Incomplete";
+        } else if (this.getStatus() == 1) {
+            state = "IMPORTANT";
+        } else {
+            state = "Complete";
+        }
+        return (this.getDesc() + this.getTime() + state);
+    }
+
     public int getTime() {
         return this.startTime;
     }
