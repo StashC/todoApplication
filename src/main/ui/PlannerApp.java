@@ -18,11 +18,10 @@ public class PlannerApp {
     }
 
     //MODIFIES: this
-    //EFFECTS: processes user input
+    //EFFECTS: processes user input and displays interface, handles user termination
     private void runApp() {
         boolean isRunning = true;
         String command = null;
-
         setup();
 
         while (isRunning) {
@@ -39,12 +38,13 @@ public class PlannerApp {
     }
 
     //MODIFIES: this
-    //EFFECTS: initializes the program
+    //EFFECTS: initializes the taskList and scanner
     private void setup() {
         taskList = new TaskList();
         input = new Scanner(System.in);
     }
 
+    //EFFECTS: Helper method to display the options for user input and list.
     private void displayInterface() {
         displayList();
         System.out.println();
@@ -56,7 +56,7 @@ public class PlannerApp {
         System.out.println("\tq \t quit");
     }
 
-    //!!!!!!
+    //EFFECTS: Formats the current TaskList with task #'s and proper formatting
     private void displayList() {
         System.out.println("My Day: ");
         int num = 1;
@@ -70,6 +70,7 @@ public class PlannerApp {
         }
     }
 
+    //MODIFIES: this
     //EFFECTS calls correct operation based on input command and state of taskList
     private void handleCommand(String c) {
         if (c.equals("a")) {
@@ -93,19 +94,21 @@ public class PlannerApp {
         }
     }
 
-    //!!!
+    //MODIFIES: this
+    //EFFECTS: Adds a task to the taskList based on user input.
     private void doAddTask() {
         Task newTask;
         String desc;
         int time;
         int status;
         System.out.println("Enter task description: ");
-        String blank = input.nextLine();
+        String temp = input.nextLine();
         desc = input.nextLine();
         System.out.println("Enter start time (hhmm) e.g 1430");
         time = input.nextInt();
         System.out.println("Is this task important? y/n");
-        if (input.next() == "y") {
+        temp = input.nextLine();
+        if (input.nextLine().equals("y")) {
             status = 1;
         } else {
             status = 0;
@@ -115,7 +118,8 @@ public class PlannerApp {
         System.out.println("Task added successfully!");
     }
 
-    //!!!
+    //MODIFIES: this
+    //EFFECTS: Removes user-specified task from the TaskList
     private void doRemoveTask() {
         int taskNum;
         displayList();
@@ -130,7 +134,8 @@ public class PlannerApp {
     }
 
 
-    //!!!
+    //MODIFIES: this
+    //EFFECTS: updates the status of user-specified task to the user-specified status
     private void doUpdateTask() {
         int index;
         int statusIn;
