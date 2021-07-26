@@ -13,16 +13,20 @@ public class TaskList {
         this.tasks = new ArrayList<Task>();
     }
 
-    //EFFECTS returns the task that is next chronologically (lowest time)
+    //EFFECTS returns the first non-completed task
     public Task getNextTask() {
-        return tasks.get(0);
+        for (int i = 0; i <= this.tasks.size() - 1; i++) {
+            if (this.tasks.get(i).getStatus() == 0 || this.tasks.get(i).getStatus() == 1) {
+                return this.tasks.get(i);
+            }
+        }
+        return null;
     }
 
     //REQUIRES Task is Valid??
     //MODIFIES this
     //EFFECTS  adds the given task to the Tasklist, correctly Inserted chronologically
     public void addTask(Task t) {
-
         if (this.tasks.size() == 0 || t.getTime() >= tasks.get(tasks.size() - 1).getTime()) {
             this.tasks.add(t);
         } else {

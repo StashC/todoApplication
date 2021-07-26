@@ -44,7 +44,7 @@ public class Task {
         } else {
             state = "Complete";
         }
-        return (this.getDesc() + this.getTime() + state);
+        return (this.getDesc() + " | " + this.getTime() + " | " + state);
     }
 
     public int getTime() {
