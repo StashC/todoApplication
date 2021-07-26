@@ -21,7 +21,7 @@ of the two and create a user-friendly time planner.</p>
 - Mark tasks as completed in a todo format.
 - View all scheduled tasks.
 
-##User Stories
+### User Stories
 
 - As a user, I want to be able to schedule a task.
 - As a user, I want to be able to remove a task.
