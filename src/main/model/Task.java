@@ -1,9 +1,10 @@
 package model;
 
+//A Task represents a task documented with a description, starting time and status.
+//status represents a task's importance.  0 = incomplete.  1 = important.  2 = complete
 public class Task {
     private String description;
     private int startTime;
-    //status represents a task's importance.  0 = incomplete.  1 = important.  2 = complete
     private int status;
 
     //REQUIRES  desc has non-zero length, time is in valid 24hr format (hhmm) e.g 1200
@@ -53,11 +54,6 @@ public class Task {
 
     public int getStatus() {
         return this.status;
-    }
-
-    //REQUIRES time input is in proper format indicated by console
-    public void setStartTime(int time) {
-        this.startTime = time;
     }
 
     public String getDesc() {

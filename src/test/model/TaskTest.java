@@ -4,7 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+//Tests the functionality of a Task
 public class TaskTest {
     private Task testTask;
 
@@ -39,4 +41,36 @@ public class TaskTest {
         testTask.setIncomplete();
         assertEquals(0, testTask.getStatus());
     }
+
+    @Test
+    void testToStringIncomplete(){
+        //make sure task is set to incomplete
+        testTask.setIncomplete();
+        assertEquals(0, testTask.getStatus());
+
+        String testString = testTask.toString();
+        assertTrue(testString.equals(testTask.getDesc() + " | " + testTask.getTime() + " | " + "Incomplete"));
+    }
+
+    @Test
+    void testToStringImportant(){
+        //make sure task is set to incomplete
+        testTask.setImportant();
+        assertEquals(1, testTask.getStatus());
+
+        String testString = testTask.toString();
+        assertTrue(testString.equals(testTask.getDesc() + " | " + testTask.getTime() + " | " + "IMPORTANT"));
+    }
+
+    @Test
+    void testToStringComplete(){
+        //make sure task is set to incomplete
+        testTask.setComplete();
+        assertEquals(2, testTask.getStatus());
+
+        String testString = testTask.toString();
+        assertTrue(testString.equals(testTask.getDesc() + " | " + testTask.getTime() + " | " + "Complete"));
+    }
+
+
 }

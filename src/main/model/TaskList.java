@@ -2,10 +2,9 @@ package model;
 
 import java.util.ArrayList;
 
+//A TaskList is a list of Tasks which is stored using an ArrayList.
+//INVARIANT, a TaskList should always be sorted Ascending Chronologically;
 public class TaskList {
-
-    //INVARIANT, a TaskList should always be sorted Ascending Chronologically;
-
     private ArrayList<Task> tasks;
 
     //EFFECTS  creates a new empty tasklist
@@ -23,18 +22,24 @@ public class TaskList {
         return null;
     }
 
-    //REQUIRES Task is Valid??
+    //REQUIRES Task has proper time formatting
     //MODIFIES this
     //EFFECTS  adds the given task to the Tasklist, correctly Inserted chronologically
     public void addTask(Task t) {
-        if (this.tasks.size() == 0 || t.getTime() >= tasks.get(tasks.size() - 1).getTime()) {
+        int i = 0;
+        if (this.tasks.size() == 0) {
             this.tasks.add(t);
         } else {
-            for (int i = 0; i <= this.tasks.size() - 1; i++) {
-                if (t.getTime() < this.tasks.get(i).getTime()) {
+            //loops through tasks, inserts task before first task with later start time
+            for (Task task : this.tasks) {
+                if (t.getTime() < task.getTime()) {
                     this.tasks.add(i, t);
                     break;
                 }
+                i++;
+            }
+            if (t.getTime() >= tasks.get(tasks.size() - 1).getTime()) {
+                this.tasks.add(t);
             }
         }
     }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//Tests the functionality of a TaskList
 public class TaskListTest {
     private TaskList testTaskList;
     private ArrayList<Task> taskList;
@@ -45,8 +46,27 @@ public class TaskListTest {
     }
 
     @Test
-    void testGetNextTask() {
+    void testGetNextTaskFirst() {
         assertTrue(isEqual(task1, testTaskList.getNextTask()));
+    }
+
+    @Test
+    void testGetNextTaskLast() {
+        testTaskList.getTasks().get(0).setComplete();
+        assertTrue(isEqual(task2, testTaskList.getNextTask()));
+    }
+
+    @Test
+    void testGetNextImportant() {
+        testTaskList.getTasks().get(0).setImportant();
+        assertTrue(isEqual(testTaskList.getNextTask(), task1));
+    }
+
+    @Test
+    void testGetNextAllComplete() {
+        testTaskList.getTasks().get(0).setComplete();
+        testTaskList.getTasks().get(1).setComplete();
+        assertEquals(null, testTaskList.getNextTask());
     }
 
     @Test
@@ -81,6 +101,26 @@ public class TaskListTest {
     }
 
     @Test
+        //TEST ADD MULTIPLE X TO Y
+    void testAddMany() {
+        Task test1 = new Task("test1", 800, 0);
+        Task test2 = new Task("test2", 1330, 1);
+        Task test3 = new Task("test3", 2100, 2);
+        testTaskList.addTask(test1);
+        testTaskList.addTask(test2);
+        testTaskList.addTask(test3);
+        //list should be  test1 task1 test2 task2 test3
+        assertTrue(isEqual(test1, testTaskList.getTasks().get(0)));
+        assertTrue(isEqual(task1, testTaskList.getTasks().get(1)));
+        assertTrue(isEqual(test2, testTaskList.getTasks().get(2)));
+        assertTrue(isEqual(task2, testTaskList.getTasks().get(3)));
+        assertTrue(isEqual(test3, testTaskList.getTasks().get(4)));
+        assertEquals(testTaskList.getTasks().size(), 5);
+
+
+    }
+
+    @Test
     void testRemoveTaskBeginning() {
         //list should be [task1, task2]
         testTaskList.removeTask(0);
@@ -107,5 +147,6 @@ public class TaskListTest {
         assertEquals(1, testTaskList.getTasks().size());
         assertTrue(isEqual(taskList.get(0), task1));
     }
+
 
 }

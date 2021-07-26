@@ -6,7 +6,7 @@ import model.TaskList;
 
 import java.util.Scanner;
 
-//Day planner application
+//Day planner application.  Handles the UI for the application.
 public class PlannerApp {
 
     private TaskList taskList;
