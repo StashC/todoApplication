@@ -28,3 +28,5 @@ of the two and create a user-friendly time planner.</p>
 - As a user, I want to be able to mark a task as complete or important.
 - As a user, I want to be able to view a quick breakdown of my day.
 - As a user, I want to be able to view all my scheduled tasks.
+- As a user, I want to be able to save my to do list to a file.
+- As a user, I want to be abel to load my to do list from a file.
