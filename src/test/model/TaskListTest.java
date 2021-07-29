@@ -28,7 +28,7 @@ public class TaskListTest {
     @BeforeEach
     void setup() {
         //creates a new TaskList() before each test, already sorted.
-        testTaskList = new TaskList();
+        testTaskList = new TaskList("March 7th");
         testTaskList.addTask(task1);
         testTaskList.addTask(task2);
 

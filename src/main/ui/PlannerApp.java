@@ -3,24 +3,34 @@ package ui;
 
 import model.Task;
 import model.TaskList;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 //Day planner application.  Handles the UI for the application.
 public class PlannerApp {
-
+    private static final String JSON_PATH = "./data/tasklist.json";
     private TaskList taskList;
     private Scanner input;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+    private boolean isRunning;
+
 
     //EFFECTS: runs the application
     public PlannerApp() {
+        jsonWriter = new JsonWriter(JSON_PATH);
+        jsonReader = new JsonReader(JSON_PATH);
         runApp();
     }
 
     //MODIFIES: this
     //EFFECTS: processes user input and displays interface, handles user termination
     private void runApp() {
-        boolean isRunning = true;
+        isRunning = true;
         String command = null;
         setup();
 
@@ -30,7 +40,7 @@ public class PlannerApp {
             command = command.toLowerCase();
 
             if (command.equals("q")) {
-                isRunning = false;
+                handleSaving();
             } else {
                 handleCommand(command);
             }
@@ -38,26 +48,73 @@ public class PlannerApp {
     }
 
     //MODIFIES: this
-    //EFFECTS: initializes the taskList and scanner
+    //EFFECTS: initializes the taskList and scanner, handles loading;
     private void setup() {
-        taskList = new TaskList();
         input = new Scanner(System.in);
+        handleLoading();
+
     }
+
+    private void handleLoading() {
+        System.out.println("Would you like to load your previous list?  y/n ");
+        if (input.next().equals("y")) {
+            try {
+                taskList = jsonReader.read();
+                System.out.println("Retrieved TaskList " + taskList.getDate() + "!");
+            } catch (IOException e) {
+                System.out.println("Unable to load previous task list... ");
+                createTaskList();
+            }
+        } else {
+            createTaskList();
+        }
+    }
+
+    //MODIFIES: this
+    //EFFECTS: create new TaskList with user-input date
+    private void createTaskList() {
+        System.out.println("To create a new list, please enter today's date: ");
+        String temp = input.nextLine();
+        taskList = new TaskList(input.nextLine());
+    }
+
+    private void handleSaving() {
+        System.out.println("would you like to save the current TaskList? y/n");
+        String command = input.next();
+        if (command.equals("y")) {
+            try {
+                jsonWriter.open();
+                jsonWriter.write(taskList);
+                jsonWriter.close();
+                System.out.println("TaskList from: " + taskList.getDate() + " saved successfully!");
+                isRunning = false;
+            } catch (FileNotFoundException e) {
+                System.out.println("Unable to write to file: " + JSON_PATH);
+            }
+        } else if (command.equals("n")) {
+            isRunning = false;
+        } else {
+            System.out.println("Input Invalid...");
+            handleSaving();
+        }
+    }
+
 
     //EFFECTS: Helper method to display the options for user input and list.
     private void displayInterface() {
         displayList();
         System.out.println();
-        System.out.println("Select from: ");
+        System.out.println("Select from:");
         System.out.println("\ta \t add new task");
         System.out.println("\tr \t remove a task");
         System.out.println("\tm \t modify task");
         System.out.println("\tn \t display next task");
-        System.out.println("\tq \t quit");
+        System.out.println("\tq \t quit, with/without saving");
     }
 
     //EFFECTS: Formats the current TaskList with task #'s and proper formatting
     private void displayList() {
+        System.out.println(taskList.getDate());
         System.out.println("My Day: ");
         int num = 1;
         if (taskList.getTasks().size() != 0) {

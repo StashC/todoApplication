@@ -1,14 +1,20 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 
 //A TaskList is a list of Tasks which is stored using an ArrayList.
 //INVARIANT, a TaskList should always be sorted Ascending Chronologically;
-public class TaskList {
+public class TaskList implements Writable {
     private ArrayList<Task> tasks;
+    private String date;
 
     //EFFECTS  creates a new empty tasklist
-    public TaskList() {
+    public TaskList(String date) {
+        this.date = date;
         this.tasks = new ArrayList<Task>();
     }
 
@@ -53,6 +59,30 @@ public class TaskList {
 
     public ArrayList<Task> getTasks() {
         return this.tasks;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("Date:", date);
+        //turn the actual list of tasks into a JSONArray
+        json.put("TaskList", tasksToJson());
+        return json;
+    }
+
+    //EFFECTS: returns the tasks in the list as a formatted JSONArray
+    private JSONArray tasksToJson() {
+        JSONArray jsarray = new JSONArray();
+
+        for (Task t : this.tasks) {
+            jsarray.put(t.toJson());
+        }
+        return jsarray;
+    }
+
+    //EFFECTS: returns the date as string
+    public String getDate() {
+        return this.date;
     }
 
 }

@@ -1,8 +1,11 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 //A Task represents a task documented with a description, starting time and status.
 //status represents a task's importance.  0 = incomplete.  1 = important.  2 = complete
-public class Task {
+public class Task implements Writable {
     private String description;
     private int startTime;
     private int status;
@@ -58,6 +61,15 @@ public class Task {
 
     public String getDesc() {
         return this.description;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("description", this.description);
+        json.put("start time", this.startTime);
+        json.put("importance", this.status);
+        return json;
     }
 
 }
