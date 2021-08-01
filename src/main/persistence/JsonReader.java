@@ -11,6 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+    /*  Acknowledgement:
+    /   This JsonReader class was modeled from the JsonSerializationDemo example class.
+    */
+
 //a reader which can read a TaskList from a JSON data file
 public class JsonReader {
     private String src;

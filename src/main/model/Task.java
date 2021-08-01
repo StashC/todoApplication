@@ -38,7 +38,7 @@ public class Task implements Writable {
     }
 
     @Override
-    //EFFECTS: returns properly formatted string of task
+    //EFFECTS returns properly formatted string of task
     public String toString() {
         String state = "";
         if (this.getStatus() == 0) {
@@ -64,6 +64,7 @@ public class Task implements Writable {
     }
 
     @Override
+    //EFFECTS Returns this Task in JSONObject format to be stored by JsonWriter.
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("description", this.description);
