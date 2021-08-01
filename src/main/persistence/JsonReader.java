@@ -56,6 +56,7 @@ public class JsonReader {
         }
     }
 
+    //EFFECTS gets task from given JSObject and adds it to input TaskList.  Works in tandem with addTasks()
     private void addTask(TaskList tl, JSONObject jsObject) {
         String desc = jsObject.getString("description");
         int startTime = jsObject.getInt("start time");
