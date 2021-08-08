@@ -10,32 +10,33 @@ import java.awt.event.ActionListener;
 import static ui.GUI.SIDEBAR_WIDTH;
 import static ui.GUI.WINDOW_WIDTH;
 
-public class TaskPanel extends JPanel implements ActionListener {
-    private JPanel taskPanel;
+public class TaskPanel extends JPanel {
     private Task task;
-    private Icon incompleteIcon = new ImageIcon("data/images/EmptyCircleIcon.png");
-    private Icon importantIcon = new ImageIcon("data/images/StarIcon.png");
-    private Icon completeIcon = new ImageIcon("data/images/CheckMarkIcon.png");
+    private JPanel taskPanel;
+    private StatusButton statusButton;
+    private ImportantButton importantButton;
+    private int taskNum;
 
-
-    public TaskPanel(Task t) {
+    public TaskPanel(Task t, int tnum) {
         this.task = t;
-        int statusButtonWidth = 10;
+        this.taskNum = tnum;
         int taskPanelHeight = 50;
-
+        JLabel numLabel = new JLabel(Integer.toString(tnum));
         JPanel resultPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
         resultPanel.setBackground(new Color(166, 203, 205));
         resultPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        JButton statusButton = new JButton();
-        statusButton.setIcon(getStatusIcon());
-        //statusButton.setMaximumSize(new Dimension(statusButtonWidth, taskPanelHeight));
+        statusButton = new StatusButton(this.task);
+
         JLabel taskLabel = new JLabel();
         taskLabel.setText(displayString());
-        //taskLabel.setPreferredSize(new Dimension(WINDOW_WIDTH - SIDEBAR_WIDTH - statusButtonWidth, taskPanelHeight));
         resultPanel.setMaximumSize(new Dimension(WINDOW_WIDTH - SIDEBAR_WIDTH, taskPanelHeight));
-        resultPanel.add(statusButton);
+        this.importantButton = new ImportantButton(this.task);
+
+        resultPanel.add(numLabel);
+        resultPanel.add(statusButton.getButton());
         resultPanel.add(taskLabel);
+        resultPanel.add(importantButton.getButton());
         this.taskPanel = resultPanel;
     }
 
@@ -43,24 +44,10 @@ public class TaskPanel extends JPanel implements ActionListener {
         return this.task.getDesc() + "  |  " + this.task.getTime();
     }
 
-    private Icon getStatusIcon() {
-        Icon result;
-        if (task.getStatus() == 1) {
-            result = importantIcon;
-        } else if (task.getStatus() == 2) {
-            result = completeIcon;
-        } else {
-            result = incompleteIcon;
-        }
-        return result;
-    }
+
 
     public JPanel getTPanel() {
         return this.taskPanel;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
 }

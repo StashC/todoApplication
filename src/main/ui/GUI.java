@@ -2,46 +2,65 @@ package ui;
 
 import model.Task;
 import model.TaskList;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
-public class GUI {
-    private int count = 0;
-
+public class GUI implements ActionListener {
+    //Constant Measurements
     public static final int WINDOW_WIDTH = 500;
     public static final int WINDOW_HEIGHT = 650;
 
     public static final int TITLE_BAR_HEIGHT = 40;
 
-    public static final int SIDEBAR_WIDTH = 80;
+    public static final int SIDEBAR_WIDTH = 85;
     public static final int SIDEBAR_BUTTON_HEIGHT = 30;
 
-    private Color actionPanelColor = new Color(86, 201, 255);
-    private Color bckgrndPnlColor = new Color(120, 151, 154);
-    private Color sidePnlColor = new Color(141, 136, 136);
-    private Color titlePnlColor = new Color(90, 168, 248, 255);
+    //COLOR DECLARATIONS
+    private static Color actionPnlColor = new Color(86, 201, 255);
+    private static Color bckgrndPnlColor = new Color(120, 151, 154);
+    private static Color sidePnlColor = new Color(141, 136, 136);
+    private static Color titlePnlColor = new Color(90, 168, 248, 255);
 
 
-    private TaskList tl;
-
-    private JLabel label;
+    private TaskList taskList;
+    private JLabel dateLabel;
+    private JLabel taskNumLabel;
     private JPanel sidePanel;
     private JPanel mainPanel;
     private JPanel titlePanel;
     private JPanel taskPanel;
-    private JPanel actionPanel;
     private JFrame frame = new JFrame();
     private JSplitPane sideDiv;
-    private JSplitPane splitTitle;
+    private JPanel actionPanel;
+
+    //Json
+    private static final String JSON_PATH = "./data/tasklist.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+
+    //sidebar buttons
+    private JButton todoButton;
+    private JButton saveButton;
+    private JButton loadButton;
+    private JButton quitButton;
+    private JButton newListButton;
 
     public GUI() {
-        //topDiv = new JSplitPane(JSplitPane.VERTICAL_SPLIT, titlePanel, )
-        tl = new TaskList("March 7th");
-        tl.addTask(new Task("Wheezy Outta Here", 1200, 1));
-        tl.addTask(new Task("LIKE THE 3 MUSKETEERS AY AY ", 1100, 2));
-        tl.addTask(new Task("I wanna die", 1300, 0));
+        jsonWriter = new JsonWriter(JSON_PATH);
+        jsonReader = new JsonReader(JSON_PATH);
+
+        initTaskList();
+
+        actionPanel = new ActionPanel(this).getJPanel();
+
         initTitlePanel();
         initTaskPanel();
         initSidePanel();
@@ -52,44 +71,64 @@ public class GUI {
         sideDiv.setEnabled(false);
         sideDiv.setDividerSize(0);
         frame.add(sideDiv);
-        //frame.add(createTaskPanel(tl.getTasks().get(0)));
-
-
-        //adding first = bottom layer
-        // frame.add(sidePanel, BorderLayout.WEST);
-        // frame.add(titlePanel, BorderLayout.NORTH);
 
         frame.setTitle("ToDo");
         frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setResizable(false);
+        //Hides window while waiting for user to create real list
+        while (taskList.getDate().equals("BugFixPurposes")) {
+            frame.setVisible(false);
+        }
         frame.setVisible(true);
-
     }
 
-    private void initTaskPanel() {
+    private void initTaskList() {
+        try {
+            taskList = jsonReader.read();
+            System.out.println("Retrieved TaskList " + taskList.getDate() + "!");
+        } catch (IOException e) {
+            System.out.println("Unable to load previous task list... ");
+            //creates temp task list to keep program from crashing during setup
+            taskList = new TaskList("BugFixPurposes");
+            createTaskList();
+        }
+    }
+
+    public void initTaskPanel() {
         taskPanel = new JPanel();
         taskPanel.setBackground(bckgrndPnlColor);
         taskPanel.setLayout(new BoxLayout(taskPanel, BoxLayout.PAGE_AXIS));
 
-        for (Task t : tl.getTasks()) {
-            TaskPanel tempPanel = new TaskPanel(t);
+        updateTaskPanel();
+    }
+
+    public void updateTaskPanel() {
+        taskPanel.removeAll();
+        taskPanel.revalidate();
+        taskPanel.repaint();
+        taskPanel.add(actionPanel);
+        int i = 1;
+        for (Task t : taskList.getTasks()) {
+            TaskPanel tempPanel = new TaskPanel(t, i);
             taskPanel.add(tempPanel.getTPanel());
+            System.out.println(taskList.getTasks());
+            i++;
         }
+
     }
 
     private void initMainPanel() {
-        //!!! ADD ACTION PANEL AT TOP of main panel
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
         mainPanel.add(titlePanel);
         //mainPanel.add(actionPanel);
-        mainPanel.add(taskPanel);
-
+        JScrollPane scrollPane = new JScrollPane(taskPanel);
+        mainPanel.add(scrollPane);
+        //mainPanel.add(taskPanel);
     }
 
     private void initSidePanel() {
-        Dimension buttonDimensions = new Dimension(SIDEBAR_WIDTH, SIDEBAR_BUTTON_HEIGHT);
         //creates the Panel
         sidePanel = new JPanel();
         sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.PAGE_AXIS));
@@ -97,24 +136,44 @@ public class GUI {
         //sidePanel.setBorder(BorderFactory.createLineBorder(Color.darkGray));
         sidePanel.setBackground(sidePnlColor);
 
-        //Creates sidebar buttons / tabs
-        JButton todoButton = new JButton("ToDo");
-        JButton saveButton = new JButton("Save");
-        todoButton.setMaximumSize(buttonDimensions);
-        saveButton.setMaximumSize(buttonDimensions);
+        initSideButtons();
 
         sidePanel.add(todoButton);
         sidePanel.add(saveButton);
+        sidePanel.add(loadButton);
+        sidePanel.add(newListButton);
+        sidePanel.add(quitButton, BorderLayout.SOUTH);
+    }
 
+    private void initSideButtons() {
+        Dimension buttonDimensions = new Dimension(SIDEBAR_WIDTH, SIDEBAR_BUTTON_HEIGHT);
+
+        //Creates sidebar buttons / tabs
+        todoButton = new JButton("ToDo");
+        saveButton = new JButton("Save");
+        loadButton = new JButton("Load");
+        quitButton = new JButton("Quit");
+        newListButton = new JButton("New List");
+
+        //for style
+        todoButton.setMaximumSize(buttonDimensions);
+        saveButton.setMaximumSize(buttonDimensions);
+        newListButton.setMaximumSize(buttonDimensions);
+        loadButton.setMaximumSize(buttonDimensions);
+        quitButton.setMaximumSize(buttonDimensions);
+        saveButton.addActionListener(this);
+        loadButton.addActionListener(this);
+        newListButton.addActionListener(this);
+        quitButton.addActionListener(this);
     }
 
     private void initTitlePanel() {
         //TaskList name text
-        JLabel dateLabel = new JLabel();
-        dateLabel.setText(tl.getDate());
+        dateLabel = new JLabel();
+        dateLabel.setText(taskList.getDate());
 
-        JLabel taskNumLabel = new JLabel();
-        taskNumLabel.setText(tl.getTasks().size() + " Tasks!");
+        taskNumLabel = new JLabel();
+        taskNumLabel.setText(taskList.getTasks().size() + " Tasks!");
 
         titlePanel = new JPanel();
         titlePanel.setLayout(new GridLayout(2, 1));
@@ -126,11 +185,76 @@ public class GUI {
         titlePanel.setMaximumSize(new Dimension(WINDOW_WIDTH, TITLE_BAR_HEIGHT));
     }
 
-    private void initActionPanel() {
-        int barHeight = 20;
-        actionPanel = new JPanel(new BorderLayout());
-        titlePanel.setBackground(actionPanelColor);
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        //Turn the event into a Jbutton, and get text from button
+        JButton b = (JButton) e.getSource();
+        String text = b.getText();
 
+        if (text.equals("Save")) {
+            save();
+        } else if (text.equals("Load")) {
+            load();
+        } else if (text.equals("New List")) {
+            createTaskList();
+        } else if (text.equals("Quit")) {
+            quit();
+        }
+    }
+
+    public void save() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(taskList);
+            jsonWriter.close();
+            System.out.println("TaskList from: " + taskList.getDate() + " saved successfully!");
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_PATH);
+        }
+    }
+
+    private void load() {
+        TaskList oldList = this.taskList;
+        try {
+            taskList = jsonReader.read();
+            System.out.println("Retrieved TaskList " + taskList.getDate() + "!");
+        } catch (IOException e) {
+            System.out.println("Unable to load previous task list... ");
+            this.taskList = oldList;
+        } finally {
+            updateTitlePanel();
+            updateTaskPanel();
+        }
+    }
+
+    private void createTaskList() {
+        new CreateTaskListWindow(this);
+    }
+
+    private void quit() {
+        new QuitWindow(this);
+    }
+
+    public void updateTitlePanel() {
+        dateLabel.setText(taskList.getDate());
+        taskNumLabel.setText(taskList.getTasks().size() + " Tasks!");
+
+        titlePanel.revalidate();
+        titlePanel.repaint();
+    }
+
+
+    public TaskList getTaskList() {
+        return this.taskList;
+    }
+
+    public void setTaskList(TaskList tl) {
+        this.taskList = tl;
+        //updateTaskPanel();
+    }
+
+    public Color getActionColor() {
+        return this.actionPnlColor;
     }
 
 }
