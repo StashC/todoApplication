@@ -1,7 +1,6 @@
 package persistence;
 
 import model.TaskList;
-import netscape.javascript.JSObject;
 import org.json.JSONObject;
 
 import java.io.File;

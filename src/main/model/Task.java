@@ -3,8 +3,6 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import javax.swing.*;
-
 //A Task represents a task documented with a description, starting time and status.
 //status represents a task's importance.  0 = incomplete.  1 = important.  2 = complete
 public class Task implements Writable {

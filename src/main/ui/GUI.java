@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import static javax.swing.JOptionPane.showMessageDialog;
 
 //DayPlanner application.  The central object of the program.  Creates main JFrame/ Window and creates all main panels.
@@ -53,6 +54,7 @@ public class GUI implements ActionListener {
     private JButton loadButton;
     private JButton quitButton;
     private JButton newListButton;
+    private Icon todoLogo = new ImageIcon("data/images/todoLogo.png");
 
     //EFFECTS Sets up the JSonReader/Writer and initializes the program.  Creates the main JFrame and panels.
     public GUI() {
@@ -179,6 +181,12 @@ public class GUI implements ActionListener {
         loadButton.addActionListener(this);
         newListButton.addActionListener(this);
         quitButton.addActionListener(this);
+
+        todoButton.setBorderPainted(false);
+        todoButton.setBorder(null);
+        todoButton.setMargin(new Insets(0, 0, 0, 0));
+        todoButton.setContentAreaFilled(false);
+        todoButton.setIcon(todoLogo);
     }
 
     //MODIFIES this
