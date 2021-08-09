@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+//the window responsible for prompting user to save and exiting the program.
 public class QuitWindow implements ActionListener {
 
     private GUI theGUI;
@@ -15,6 +16,7 @@ public class QuitWindow implements ActionListener {
     private int windowWidth = 200;
     private int windowHeight = 100;
 
+    //EFFECTS creates a new Quit window, creating the JFrame and main JPanel along with the Buttons.
     public QuitWindow(GUI gui) {
         this.theGUI = gui;
 
@@ -36,10 +38,13 @@ public class QuitWindow implements ActionListener {
         panel.add(noButton);
         panel.add(yesButton);
 
+        frame.setLocationRelativeTo(null);
         frame.add(panel);
         frame.setVisible(true);
     }
 
+    //MODIFIES this
+    //EFFECTS Either saves and then exits the program, or simply exits the program based on desired action.
     @Override
     public void actionPerformed(ActionEvent e) {
         //Turn the event into a Jbutton, and get text from button
@@ -54,4 +59,5 @@ public class QuitWindow implements ActionListener {
             System.exit(0);
         }
     }
+
 }

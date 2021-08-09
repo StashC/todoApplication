@@ -11,8 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import static javax.swing.JOptionPane.showMessageDialog;
 
-
+//DayPlanner application.  The central object of the program.  Creates main JFrame/ Window and creates all main panels.
 public class GUI implements ActionListener {
     //Constant Measurements
     public static final int WINDOW_WIDTH = 500;
@@ -53,6 +54,7 @@ public class GUI implements ActionListener {
     private JButton quitButton;
     private JButton newListButton;
 
+    //EFFECTS Sets up the JSonReader/Writer and initializes the program.  Creates the main JFrame and panels.
     public GUI() {
         jsonWriter = new JsonWriter(JSON_PATH);
         jsonReader = new JsonReader(JSON_PATH);
@@ -79,9 +81,12 @@ public class GUI implements ActionListener {
         while (taskList.getDate().equals("BugFixPurposes")) {
             frame.setVisible(false);
         }
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
+    //MODIFIES this
+    //EFFECTS attempts to load the previous TaskList.  If unsuccessful, prompts user to create a new TaskList
     private void initTaskList() {
         try {
             taskList = jsonReader.read();
@@ -94,6 +99,8 @@ public class GUI implements ActionListener {
         }
     }
 
+    //MODIFIES this
+    //EFFECTS creates the TaskPanel with correct background color.  Calls updateTaskPanel() to draw an initial tasks.
     public void initTaskPanel() {
         taskPanel = new JPanel();
         taskPanel.setBackground(bckgrndPnlColor);
@@ -102,6 +109,9 @@ public class GUI implements ActionListener {
         updateTaskPanel();
     }
 
+    //MODIFIES this
+    //EFFECTS used to display any changes to the TaskList during runtime.  Loops through TaskList and creates
+    //        a new TaskPanel object for each task in the list.
     public void updateTaskPanel() {
         taskPanel.removeAll();
         taskPanel.revalidate();
@@ -117,17 +127,19 @@ public class GUI implements ActionListener {
 
     }
 
+    //MODIFIES this
+    //EFFECTS  creates the mainPanel.  mainPanel encompasses the TaskPanel, actionPanel (through taskPanel), titlePanel
     private void initMainPanel() {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
         mainPanel.add(titlePanel);
-        //mainPanel.add(actionPanel);
         JScrollPane scrollPane = new JScrollPane(taskPanel);
         mainPanel.add(scrollPane);
-        //mainPanel.add(taskPanel);
     }
 
+    //MODIFIES this
+    //EFFECTS Creates the side panel, calls initSideButtons to create the sideButtons.
     private void initSidePanel() {
         //creates the Panel
         sidePanel = new JPanel();
@@ -145,6 +157,8 @@ public class GUI implements ActionListener {
         sidePanel.add(quitButton, BorderLayout.SOUTH);
     }
 
+    //MODIFIES this
+    //EFFECTS  creates the side buttons for the sidebar.
     private void initSideButtons() {
         Dimension buttonDimensions = new Dimension(SIDEBAR_WIDTH, SIDEBAR_BUTTON_HEIGHT);
 
@@ -167,6 +181,8 @@ public class GUI implements ActionListener {
         quitButton.addActionListener(this);
     }
 
+    //MODIFIES this
+    //EFFECTS creates the titlePanel which displays the date of the TaskList as well as # of tasks.
     private void initTitlePanel() {
         //TaskList name text
         dateLabel = new JLabel();
@@ -185,6 +201,8 @@ public class GUI implements ActionListener {
         titlePanel.setMaximumSize(new Dimension(WINDOW_WIDTH, TITLE_BAR_HEIGHT));
     }
 
+    //MODIFIES this
+    //EFFECTS handles SideButton user input
     @Override
     public void actionPerformed(ActionEvent e) {
         //Turn the event into a Jbutton, and get text from button
@@ -202,23 +220,31 @@ public class GUI implements ActionListener {
         }
     }
 
+    //MODIFIES this
+    //EFFECTS saves the taskList to set JPath
     public void save() {
         try {
             jsonWriter.open();
             jsonWriter.write(taskList);
             jsonWriter.close();
+            showMessageDialog(null, "TaskList saved successfully");
             System.out.println("TaskList from: " + taskList.getDate() + " saved successfully!");
         } catch (FileNotFoundException e) {
             System.out.println("Unable to write to file: " + JSON_PATH);
+            showMessageDialog(null, "Error: unable to write to file");
         }
     }
 
+    //MODIFIES this
+    //EFFECTS loads the taskList from set JPath
     private void load() {
         TaskList oldList = this.taskList;
         try {
             taskList = jsonReader.read();
+            showMessageDialog(null, "TaskList Retrieved Successfully");
             System.out.println("Retrieved TaskList " + taskList.getDate() + "!");
         } catch (IOException e) {
+            showMessageDialog(null, "Unable to load task list.");
             System.out.println("Unable to load previous task list... ");
             this.taskList = oldList;
         } finally {
@@ -227,14 +253,20 @@ public class GUI implements ActionListener {
         }
     }
 
+    //MODIFIES this
+    //EFFECTS calls for creation of new TaskListWindow
     private void createTaskList() {
         new CreateTaskListWindow(this);
     }
 
+    //MODIFIES this
+    //EFFECTS calls for creation of new QuitWindow
     private void quit() {
         new QuitWindow(this);
     }
 
+    //MODIFIES this
+    //EFFECTS updates the TitlePanel to reflect changes in the TaskList
     public void updateTitlePanel() {
         dateLabel.setText(taskList.getDate());
         taskNumLabel.setText(taskList.getTasks().size() + " Tasks!");
@@ -250,7 +282,6 @@ public class GUI implements ActionListener {
 
     public void setTaskList(TaskList tl) {
         this.taskList = tl;
-        //updateTaskPanel();
     }
 
     public Color getActionColor() {

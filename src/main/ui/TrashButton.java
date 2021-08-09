@@ -5,13 +5,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+//A button used to Remove Tasks from the list.
 public class TrashButton implements ActionListener {
     private JButton removeButton;
     private Icon removeIcon = new ImageIcon("data/images/redCross.png");
     private ActionPanel actionPanel;
 
-    public TrashButton(ActionPanel rpanel) {
-        this.actionPanel = rpanel;
+    //EFFECTS creates the TrashButton object, linked to the ActionPanel.
+    public TrashButton(ActionPanel apanel) {
+        this.actionPanel = apanel;
         removeButton = new JButton("");
         removeButton.addActionListener(this);
         removeButton.setBorderPainted(false);
@@ -25,6 +27,8 @@ public class TrashButton implements ActionListener {
         return this.removeButton;
     }
 
+    //MODIFIES The TaskList [GUI.taskList]
+    //EFFECTS notifies action panel that the button was pressed.
     @Override
     public void actionPerformed(ActionEvent e) {
         actionPanel.remove();
