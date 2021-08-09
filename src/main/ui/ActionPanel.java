@@ -20,6 +20,7 @@ public class ActionPanel implements ActionListener {
     private Icon addIcon = new ImageIcon("data/images/plusIcon.png");
 
 
+    //EFFECTS creates a new action panel, sets this.thegui to given gui and adds remove and add button
     public ActionPanel(GUI gui) {
         this.theGUI = gui;
         this.tl = theGUI.getTaskList();
@@ -38,6 +39,8 @@ public class ActionPanel implements ActionListener {
 
     }
 
+    //MODIFIES this
+    //EFFECTS removes the task from given index-1, updates the title and the task panel to reflect the change.
     public void remove() {
         //check if input integer - 1 is in index of set.
         input = Integer.parseInt(removeText.getText());
@@ -50,6 +53,8 @@ public class ActionPanel implements ActionListener {
         }
     }
 
+    //MODIFIES this
+    //EFFECTS creates the addButton
     private void initAddButton() {
         addButton = new JButton();
         addButton.addActionListener(this);
@@ -65,6 +70,7 @@ public class ActionPanel implements ActionListener {
     }
 
     //ActionListener for JTextField
+    //EFFECTS, creates a new window, allowing user input to create new task.
     @Override
     public void actionPerformed(ActionEvent e) {
         AddTaskWindow temp = new AddTaskWindow(theGUI);

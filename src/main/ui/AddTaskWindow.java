@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+//A window with JTextFields to handle user input which creates and adds a new text to the list.
 public class AddTaskWindow implements ActionListener {
     private JFrame frame;
     private JPanel panel;
@@ -20,6 +21,7 @@ public class AddTaskWindow implements ActionListener {
     private int windowHeight = 125;
     private int windowWidth = 300;
 
+    //EFFECTS creates the AddTaskWindow.  Creates the JFrame and all the components required.
     public AddTaskWindow(GUI gui) {
         this.theGUI = gui;
         panel = new JPanel();
@@ -45,13 +47,13 @@ public class AddTaskWindow implements ActionListener {
         panel.add(timeIn);
         panel.add(isImportant);
         panel.add(confirmButton);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    public JFrame getFrame() {
-        return this.frame;
-    }
-
+    //MODIFIES this
+    //EFFECTS if input fields are null, does nothing on button press.  Else, creates and adds a new task to the list
+    //        based on user input.  Closes window after task is created and added.
     @Override
     public void actionPerformed(ActionEvent e) {
         //make sure each box is filled

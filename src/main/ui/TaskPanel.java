@@ -4,12 +4,11 @@ import model.Task;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static ui.GUI.SIDEBAR_WIDTH;
 import static ui.GUI.WINDOW_WIDTH;
 
+//Given a task, creates a JPanel with the necessary buttons to display the Task to the User in the GUI
 public class TaskPanel extends JPanel {
     private Task task;
     private JPanel taskPanel;
@@ -17,6 +16,7 @@ public class TaskPanel extends JPanel {
     private ImportantButton importantButton;
     private int taskNum;
 
+    //EFFECTS creates the JFrame, initializes taskNum and task.  Initializes and adds all components to panel.
     public TaskPanel(Task t, int tnum) {
         this.task = t;
         this.taskNum = tnum;
@@ -40,10 +40,10 @@ public class TaskPanel extends JPanel {
         this.taskPanel = resultPanel;
     }
 
+    //EFFECTS returns the Task's description and startTime in a formatted string
     private String displayString() {
         return this.task.getDesc() + "  |  " + this.task.getTime();
     }
-
 
 
     public JPanel getTPanel() {

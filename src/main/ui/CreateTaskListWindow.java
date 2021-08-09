@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+//A class for a window which prompts the user to enter a Date and creates a task list with the given date.
 public class CreateTaskListWindow implements ActionListener {
     private GUI theGUI;
     private JFrame frame;
@@ -18,6 +19,7 @@ public class CreateTaskListWindow implements ActionListener {
     private int windowHeight = 100;
     private int windowWidth = 200;
 
+    //EFFECTS sets this.theGUI to given gui.  Creates and adds all components to a new JFrame.
     public CreateTaskListWindow(GUI gui) {
         this.theGUI = gui;
 
@@ -37,11 +39,16 @@ public class CreateTaskListWindow implements ActionListener {
 
         panel.add(dateLabel);
         panel.add(dateIn);
-        panel.add(confirmButton, BorderLayout.EAST);
+        //empty component for formatting
+        panel.add(new JLabel());
+        panel.add(confirmButton);
 
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
+    //MODIFIES this
+    //EFFECTS Creates a new TaskList with input date.  If input field is empty, does nothing.
     @Override
     public void actionPerformed(ActionEvent e) {
         if (!dateIn.getText().equals("")) {
