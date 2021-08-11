@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.InvalidStatusException;
+import exceptions.TimeFormatException;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -9,11 +11,18 @@ public class Task implements Writable {
     private String description;
     private int startTime;
     private int status;
+    private String timeFormat = "([0-5]\\d)|(\\d[0-5]\\d)|([01]\\d[0-5]\\d)|(2[0-3][0-5]\\d)|(2400)|\\d";
 
-    //REQUIRES  desc has non-zero length, time is in valid 24hr format (hhmm) e.g 1200
-    //          state is either 0, 1 or 2
+
     //EFFECTS Creates a task with given description, startTime and importance
-    public Task(String desc, int time, int state) {
+    public Task(String desc, int time, int state) throws TimeFormatException, InvalidStatusException {
+        String timeString = Integer.toString(time);
+        if (state != 0 && state != 1 && state != 2) {
+            throw new InvalidStatusException();
+        }
+        if (!timeString.matches(timeFormat)) {
+            throw new TimeFormatException();
+        }
         this.description = desc;
         this.startTime = time;
         this.status = state;
@@ -72,9 +81,5 @@ public class Task implements Writable {
         json.put("importance", this.status);
         return json;
     }
-
-//    public JPanel displayGUIPanel(){
-//
-//    }
 
 }

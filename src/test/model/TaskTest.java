@@ -1,10 +1,11 @@
 package model;
 
+import exceptions.InvalidStatusException;
+import exceptions.TimeFormatException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 //Tests the functionality of a Task
 public class TaskTest {
@@ -12,7 +13,11 @@ public class TaskTest {
 
     @BeforeEach
     void setup() {
-        testTask = new Task("test", 1200, 0);
+        try {
+            testTask = new Task("test", 1200, 0);
+        } catch (Exception e) {
+            fail("Exception not expected");
+        }
     }
 
     @Test
@@ -37,13 +42,19 @@ public class TaskTest {
 
     @Test
     void testSetIncomplete() {
-        testTask = new Task("test", 1200, 2);
-        testTask.setIncomplete();
-        assertEquals(0, testTask.getStatus());
+        try {
+            testTask = new Task("test", 1200, 2);
+            testTask.setIncomplete();
+            assertEquals(0, testTask.getStatus());
+
+        } catch (Exception e) {
+            fail("Exception not expected to be thrown");
+        }
+
     }
 
     @Test
-    void testToStringIncomplete(){
+    void testToStringIncomplete() {
         //make sure task is set to incomplete
         testTask.setIncomplete();
         assertEquals(0, testTask.getStatus());
@@ -53,7 +64,7 @@ public class TaskTest {
     }
 
     @Test
-    void testToStringImportant(){
+    void testToStringImportant() {
         //make sure task is set to incomplete
         testTask.setImportant();
         assertEquals(1, testTask.getStatus());
@@ -63,7 +74,7 @@ public class TaskTest {
     }
 
     @Test
-    void testToStringComplete(){
+    void testToStringComplete() {
         //make sure task is set to incomplete
         testTask.setComplete();
         assertEquals(2, testTask.getStatus());
@@ -72,5 +83,28 @@ public class TaskTest {
         assertTrue(testString.equals(testTask.getDesc() + " | " + testTask.getTime() + " | " + "Complete"));
     }
 
+    @Test
+    void illegalTimeTest() {
+        try {
+            Task t = new Task("test", 1579, 1);
+            fail("illegal time input");
+        } catch (TimeFormatException e) {
+            //pass
+        } catch (Exception e) {
+            fail("Wrong exception caught + thrown");
+        }
+    }
+
+    @Test
+    void illegalStatusTest() {
+        try {
+            Task t = new Task("desc", 1200, 5);
+            fail("illegal status input");
+        } catch (TimeFormatException e) {
+            fail("Wrong exception caught, Time caught");
+        } catch (InvalidStatusException e){
+            //pass
+        }
+    }
 
 }

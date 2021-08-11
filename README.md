@@ -30,3 +30,10 @@ of the two and create a user-friendly time planner.</p>
 - As a user, I want to be able to view all my scheduled tasks.
 - As a user, I want to be able to save my to do list to a file.
 - As a user, I want to be abel to load my to do list from a file.
+
+###Phase 4: Task 2
+Added 2 Exceptions dealing with illegal inputs in the Task Constructor
+TimeFormatException handles any input which doesn't satisfy the new regex requirement
+IllegalStatusException handles creating tasks with an illegal state.
+ 
+This prevents the user from adding tasks which broke the old requires clause from the GUI.

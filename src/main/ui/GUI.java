@@ -93,7 +93,7 @@ public class GUI implements ActionListener {
         try {
             taskList = jsonReader.read();
             System.out.println("Retrieved TaskList " + taskList.getDate() + "!");
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Unable to load previous task list... ");
             //creates temp task list to keep program from crashing during setup
             taskList = new TaskList("BugFixPurposes");
@@ -251,7 +251,7 @@ public class GUI implements ActionListener {
             taskList = jsonReader.read();
             showMessageDialog(null, "TaskList Retrieved Successfully");
             System.out.println("Retrieved TaskList " + taskList.getDate() + "!");
-        } catch (IOException e) {
+        } catch (Exception e) {
             showMessageDialog(null, "Unable to load task list.");
             System.out.println("Unable to load previous task list... ");
             this.taskList = oldList;

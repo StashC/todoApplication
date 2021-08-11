@@ -1,6 +1,8 @@
 package ui;
 
 
+import exceptions.InvalidStatusException;
+import exceptions.TimeFormatException;
 import model.Task;
 import model.TaskList;
 import persistence.JsonReader;
@@ -21,7 +23,7 @@ public class PlannerApp {
 
 
     //EFFECTS: runs the application
-    public PlannerApp() {
+    public PlannerApp() throws TimeFormatException, InvalidStatusException {
         jsonWriter = new JsonWriter(JSON_PATH);
         jsonReader = new JsonReader(JSON_PATH);
         runApp();
@@ -29,7 +31,7 @@ public class PlannerApp {
 
     //MODIFIES: this
     //EFFECTS: processes user input and displays interface, handles user termination
-    private void runApp() {
+    private void runApp() throws TimeFormatException, InvalidStatusException {
         isRunning = true;
         String command = null;
         setup();
@@ -49,13 +51,13 @@ public class PlannerApp {
 
     //MODIFIES: this
     //EFFECTS: initializes the taskList and scanner, handles loading;
-    private void setup() {
+    private void setup() throws TimeFormatException, InvalidStatusException {
         input = new Scanner(System.in);
         handleLoading();
 
     }
 
-    private void handleLoading() {
+    private void handleLoading() throws TimeFormatException, InvalidStatusException {
         System.out.println("Would you like to load your previous list?  y/n ");
         if (input.next().equals("y")) {
             try {
@@ -129,7 +131,7 @@ public class PlannerApp {
 
     //MODIFIES: this
     //EFFECTS calls correct operation based on input command and state of taskList
-    private void handleCommand(String c) {
+    private void handleCommand(String c) throws TimeFormatException, InvalidStatusException {
         if (c.equals("a")) {
             doAddTask();
         } else if (c.equals("r")) {
@@ -153,7 +155,7 @@ public class PlannerApp {
 
     //MODIFIES: this
     //EFFECTS: Adds a task to the taskList based on user input.
-    private void doAddTask() {
+    private void doAddTask() throws TimeFormatException, InvalidStatusException {
         Task newTask;
         String desc;
         int time;

@@ -41,7 +41,7 @@ public class WriterTest extends JsonTest {
             tl = reader.read();
             assertEquals("March 7th", tl.getDate());
             assertEquals(0, tl.getTasks().size());
-        } catch (IOException e) {
+        } catch (Exception e) {
             fail("Exception note expected to be thrown");
         }
     }
@@ -67,7 +67,7 @@ public class WriterTest extends JsonTest {
             assertEquals(2, tl.getTasks().size());
             checkTask("Walk my Fish", 1200, 1, tl.getTasks().get(0));
             checkTask("Pet Dog", 1500, 2, tl.getTasks().get(1));
-        } catch (IOException e) {
+        } catch (Exception e) {
             fail("Exception not expected");
         }
 

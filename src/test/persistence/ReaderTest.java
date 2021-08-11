@@ -19,7 +19,7 @@ public class ReaderTest extends JsonTest {
         try {
             TaskList tl = reader.read();
             fail("Expected exception thrown");
-        } catch (IOException e) {
+        } catch (Exception e) {
             //Test passed
         }
     }
@@ -33,7 +33,7 @@ public class ReaderTest extends JsonTest {
             TaskList tl = reader.read();
             assertEquals("EmptyTaskList", tl.getDate());
             assertEquals(0, tl.getTasks().size());
-        } catch (IOException e) {
+        } catch (Exception e) {
             fail("Shouldn't fail, file should be readable. ");
         }
     }
@@ -50,7 +50,7 @@ public class ReaderTest extends JsonTest {
             checkTask("Pet dog", 1200, 1, tl.getTasks().get(0));
             checkTask("Walk Fish", 1500, 0, tl.getTasks().get(1));
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             fail("shouldn't fail, file should be readable ");
         }
     }

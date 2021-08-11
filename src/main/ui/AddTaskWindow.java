@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 //A window with JTextFields to handle user input which creates and adds a new text to the list.
 public class AddTaskWindow implements ActionListener {
     private JFrame frame;
@@ -64,12 +66,17 @@ public class AddTaskWindow implements ActionListener {
             }
             //create task with input and add to list.
             TaskList tempList = theGUI.getTaskList();
-            Task tempTask = new Task(descIn.getText(), Integer.parseInt(timeIn.getText()), status);
-            tempList.addTask(tempTask);
-            System.out.println("Task added successfully");
-            theGUI.updateTaskPanel();
-            theGUI.updateTitlePanel();
-            frame.dispose();
+            try {
+                Task tempTask = new Task(descIn.getText(), Integer.parseInt(timeIn.getText()), status);
+                tempList.addTask(tempTask);
+                System.out.println("Task added successfully");
+                theGUI.updateTaskPanel();
+                theGUI.updateTitlePanel();
+                frame.dispose();
+            } catch (Exception exc) {
+                System.out.println("illegal task");
+                showMessageDialog(null, "Illegal Time Input");
+            }
         }
 
     }

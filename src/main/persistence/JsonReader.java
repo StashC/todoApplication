@@ -1,5 +1,7 @@
 package persistence;
 
+import exceptions.InvalidStatusException;
+import exceptions.TimeFormatException;
 import model.Task;
 import model.TaskList;
 import org.json.JSONArray;
@@ -26,7 +28,7 @@ public class JsonReader {
 
     //EFFECTS: reads and returns TaskList
     //throws IOException if error occurs reading
-    public TaskList read() throws IOException {
+    public TaskList read() throws IOException, TimeFormatException, InvalidStatusException {
         String data = readFile(src);
         JSONObject jsobject = new JSONObject(data);
         return parseTaskList(jsobject);
@@ -44,7 +46,7 @@ public class JsonReader {
 
     //EFFECTS pareses and creates TaskList from JSONObject and returns it
     //        Gets the date of the stored task list
-    private TaskList parseTaskList(JSONObject jsObject) {
+    private TaskList parseTaskList(JSONObject jsObject) throws TimeFormatException, InvalidStatusException {
         String date = jsObject.getString("Date:");
         TaskList tl = new TaskList(date);
         addTasks(tl, jsObject);
@@ -52,7 +54,7 @@ public class JsonReader {
     }
 
     //EFFECTS parses the stored list of tasks from the JSONObject and adds to TaskList.
-    private void addTasks(TaskList tl, JSONObject jsObject) {
+    private void addTasks(TaskList tl, JSONObject jsObject) throws TimeFormatException, InvalidStatusException {
         JSONArray jsArray = jsObject.getJSONArray("TaskList");
         for (Object js : jsArray) {
             JSONObject nextTask = (JSONObject) js;
@@ -61,7 +63,7 @@ public class JsonReader {
     }
 
     //EFFECTS gets task from given JSObject and adds it to input TaskList.  Works in tandem with addTasks()
-    private void addTask(TaskList tl, JSONObject jsObject) {
+    private void addTask(TaskList tl, JSONObject jsObject) throws TimeFormatException, InvalidStatusException {
         String desc = jsObject.getString("description");
         int startTime = jsObject.getInt("start time");
         int status = jsObject.getInt("importance");
