@@ -37,3 +37,13 @@ TimeFormatException handles any input which doesn't satisfy the new regex requir
 IllegalStatusException handles creating tasks with an illegal state.
  
 This prevents the user from adding tasks which broke the old requires clause from the GUI.
+
+###Phase 4: Task 3
+
+Could have made a new abstract class which created the stylized buttons InterfaceButton for example,
+this would create a single point of control if I wanted to change how the buttons are displayed.
+I could also have another class to do this for the sidepanel buttons.  This abstraction would remove a lot of
+duplicate code in the GUI class making it easier to read.  
+I would also remove the StatusButton and ImportantButton class. I realized it is unnecessary to have these as 
+seperate objects from the TaskPanel, and with the new abstract class for creating buttons,
+it would not make the TaskPanel class too complex.  
