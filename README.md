@@ -44,7 +44,7 @@ This prevents the user from adding tasks which broke the old requires clause fro
 One change I could make would be to create a new abstract class to handle the creation of the stylized buttons,
 InterfaceButton for example.
 This would create a single point of control if I wanted to change how the buttons are displayed.
-I could also have another class to do this for the sidepanel buttons.  This abstraction would remove a lot of
+I could also have another class to do this for the sidePanel buttons.  This abstraction would remove a lot of
 duplicate code in the GUI class making it easier to read.  
 I would also remove the StatusButton and ImportantButton class. I realized it is unnecessary to have these as 
 separate objects from the TaskPanel, and with the new abstract class for creating buttons,
